@@ -110,53 +110,6 @@ graph TD
 
 ---
 
-## 🛠️ CLI Commands
-
-### 1. Initialize Project Memory
-Initialize Unimem in the current working directory. This also automatically creates `.cursorrules` and `.clauderules` to instruct new agents to load Unimem on startup.
-```bash
-unimem init --name "MyProject" --desc "A great python web app"
-```
-
-### 2. Check Memory Status
-Display the active branch, recent events table, current task focus, and changes.
-```bash
-unimem status
-```
-
-### 3. Generate Handoff Resume
-Print handoff instructions optimized for AI context consumption.
-```bash
-unimem continue
-```
-*Tip: Use `--raw` (or `-r`) to output raw markdown for piping to other tools.*
-
-### 4. Rebuild State summary
-Trigger the heuristic compiler to summarize all logged events since the last session.
-```bash
-unimem summary
-```
-
-### 5. Diagnostics Check
-Verify Unimem environment folders and health.
-```bash
-unimem doctor
-```
-
-### 6. Run Agent Sandbox
-Execute an agent tool wrapper ensuring Unimem variables and sessions are tracked automatically.
-```bash
-unimem run -a claude -- claude
-```
-
-### 7. Filesystem Watcher
-Run a background observer to track file creations, moves, deletions, and updates.
-```bash
-unimem watch
-```
-
----
-
 ## 🔌 Adapter Development Guide
 
 Unimem uses an Adapter pattern to connect code intelligence with agents. Custom adapters can be registered without modifying core code.
