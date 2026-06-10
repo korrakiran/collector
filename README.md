@@ -63,8 +63,7 @@ sequenceDiagram
     You->>Gemini: continue
     Gemini->>Gemini: Reads .unimem/memory.md
     Gemini-->>You: Continues exactly where Claude stopped
-
----
+```
 
 ## Installation Guide
 
