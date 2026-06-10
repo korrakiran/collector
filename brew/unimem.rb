@@ -170,6 +170,9 @@ class Unimem < Formula
           # Silently initialize Unimem if not present
           if [[ ! -d ".unimem" ]]; then
             unimem init --name "$(basename "$PWD")" >/dev/null 2>&1 &
+          else
+            # Silently run summary to compile state on command completion
+            unimem summary >/dev/null 2>&1 &
           fi
         fi
       }
