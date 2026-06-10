@@ -200,7 +200,7 @@ class Unimem < Formula
               cp "$HOME/$f" "$f" 2>/dev/null
             fi
           done
-          # Silently initialize Unimem if not present
+          # Silently initialize Unimem on first visit so AGENTS.md and .unimem/ exist
           if [[ ! -d ".unimem" ]]; then
             unimem init --name "$(basename "$PWD")" >/dev/null 2>&1 &
           else
