@@ -1,4 +1,4 @@
-# 🧠 Unimem — Universal Project Memory Layer for AI Coding Agents
+# Unimem — Universal Project Memory Layer for AI Coding Agents
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python Version](https://img.shields.io/badge/Python-3.12%2B-blue.svg)](https://www.python.org/downloads/)
@@ -9,39 +9,39 @@
 
 ---
 
-## 💡 Why Unimem?
+## Why Unimem?
 
 When building apps with AI agents, you often hit limits:
-* ⚠️ **Token limits or context exhaustion** force you to restart your session.
-* ⚠️ **Tool switching** (e.g., from Claude Code to Gemini CLI) means you have to write long prompt summaries to explain what you've done.
-* ⚠️ **No persistent memory** means a fresh agent has no idea what code files exist, what features are finished, or why you chose a specific database pattern.
+* **Token limits or context exhaustion** force you to restart your session.
+* **Tool switching** (e.g., from Claude Code to Gemini CLI) means you have to write long prompt summaries to explain what you've done.
+* **No persistent memory** means a fresh agent has no idea what code files exist, what features are finished, or why you chose a specific database pattern.
 
 **Unimem solves this with a zero-command, persistent project brain.** The incoming agent automatically reads `.unimem/memory.md` to instantly learn the project state, while the outgoing agent writes its progress before exiting.
 
 ---
 
-## ✨ Key Features
+## Key Features
 
-* 🚀 **Zero-Command Handoff**: You don't need to manually initialize, watch, or compile. Global shell hooks copy rule files and initialize memory automatically.
-* 📝 **Double-Layer Memory**:
+* **Zero-Command Handoff**: You don't need to manually initialize, watch, or compile. Global shell hooks copy rule files and initialize memory automatically.
+* **Double-Layer Memory**:
   * `.unimem/state.json`: A structured, queryable schema of the roadmap, completed features, and file paths.
   * `.unimem/memory.md`: An auto-generated, human-readable project context file read by AI agents at startup.
-* 🛡️ **Abrupt Crash Protection**: The Zsh shell hook automatically triggers `unimem summary` in the background every time a command completes. If an agent crashes or is interrupted (`Ctrl+C`), your project memory is saved instantly.
-* 🔌 **Universal Agent Compatibility**: Works with any agent that respects `.cursorrules` or `.clauderules`.
+* **Abrupt Crash Protection**: The Zsh shell hook automatically triggers `unimem summary` in the background every time a command completes. If an agent crashes or is interrupted (`Ctrl+C`), your project memory is saved instantly.
+* **Universal Agent Compatibility**: Works with any agent that respects `.cursorrules` or `.clauderules`.
 
 ---
 
-## 🔒 Security & Privacy
+## Security & Privacy
 
 Unimem is built with a local-first, privacy-respecting design:
-* 📴 **Zero Network Calls**: The Unimem CLI runs 100% offline. It does not send any files, code snippets, or project data to any external server or cloud service.
-* 📂 **Local Storage Only**: All project memory and configuration details are stored entirely locally inside the hidden `.unimem/` folder right at the root of your project.
-* ⚙️ **No External APIs**: The `local` summarizer engine uses built-in Python string parsing and regex heuristics to compile project state, meaning your private logs are never sent to an external LLM provider (like OpenAI or Anthropic).
-* 🔧 **Git Control**: You can choose whether to check the `.unimem/` folder into your GitHub repository (allowing other teammates to share the same memory layer) or add it to `.gitignore` to keep it strictly on your local machine.
+* **Zero Network Calls**: The Unimem CLI runs 100% offline. It does not send any files, code snippets, or project data to any external server or cloud service.
+* **Local Storage Only**: All project memory and configuration details are stored entirely locally inside the hidden `.unimem/` folder right at the root of your project.
+* **No External APIs**: The `local` summarizer engine uses built-in Python string parsing and regex heuristics to compile project state, meaning your private logs are never sent to an external LLM provider (like OpenAI or Anthropic).
+* **Git Control**: You can choose whether to check the `.unimem/` folder into your GitHub repository (allowing other teammates to share the same memory layer) or add it to `.gitignore` to keep it strictly on your local machine.
 
 ---
 
-## 🔄 Zero-Command Handoff in Action
+## Zero-Command Handoff in Action
 
 ```mermaid
 sequenceDiagram
@@ -72,9 +72,9 @@ sequenceDiagram
 
 ---
 
-## 🚀 Installation Guide
+## Installation Guide
 
-### 🍏 macOS Installation
+### macOS Installation
 
 #### Option 1: Via Homebrew (Recommended)
 You can tap and install Unimem globally with a single command:
@@ -94,7 +94,7 @@ pipx install unimem
 
 ---
 
-### 🐧 Linux Installation
+### Linux Installation
 
 #### Option 1: Via Homebrew (Linuxbrew)
 ```bash
@@ -115,7 +115,7 @@ pipx install unimem
 
 ---
 
-### 💻 Windows Installation
+### Windows Installation
 
 #### Option 1: Via WSL (Windows Subsystem for Linux)
 If you are developing inside WSL, follow the **Linux Installation** instructions above.
@@ -131,7 +131,7 @@ pipx install unimem
 
 ---
 
-## 🛠️ CLI Command Reference
+## CLI Command Reference
 
 Unimem provides a set of powerful, lightweight CLI commands:
 
@@ -169,7 +169,7 @@ Starts a filesystem watcher that logs file changes (creations, edits, deletions)
 
 ---
 
-## 📂 Memory Folder Structure
+## Memory Folder Structure
 
 All project memory resides inside a local, hidden `.unimem/` folder at the root of your project:
 
@@ -185,7 +185,7 @@ All project memory resides inside a local, hidden `.unimem/` folder at the root 
 
 ---
 
-## 🔌 Adapter Development Guide
+## Adapter Development Guide
 
 Unimem uses an Adapter pattern to connect code intelligence with agents. Custom adapters can be registered to support proprietary agents:
 
@@ -212,7 +212,7 @@ class MyCustomAdapter(BaseAdapter):
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions to Unimem! To set up local development:
 
@@ -234,6 +234,6 @@ We welcome contributions to Unimem! To set up local development:
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
