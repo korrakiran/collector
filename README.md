@@ -54,15 +54,15 @@ sequenceDiagram
     actor Claude
     actor Gemini
 
-    You->>Claude: "Build me a Habit Tracker"
-    Claude->>Claude: Codes, saves files
+    You->>Claude: Build me a Habit Tracker
+    Claude->>Claude: Codes and saves files
     Note over Claude: Unimem silently saves progress in background
-    Claude-->>You: Runs out of tokens 
+    Claude-->>You: Runs out of tokens
 
     Note over You: You open Gemini
-    You->>Gemini: "continue"
+    You->>Gemini: continue
     Gemini->>Gemini: Reads .unimem/memory.md
-    Gemini-->>You: Continues exactly where Claude stopped 
+    Gemini-->>You: Continues exactly where Claude stopped
 
 ---
 
