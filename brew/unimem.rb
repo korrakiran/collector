@@ -48,6 +48,35 @@ class Unimem < Formula
     rescue => e
       opoo "Could not write global agent rules: #{e.message}"
     end
+
+    # Configure auto-injector hook in ~/.zshrc if not present
+    zshrc_path = File.join(home_dir, ".zshrc")
+    hook_code = <<~EOS
+
+      # Unimem Auto-Rule Injector
+      unimem_inject_rules() {
+        if [[ "$PWD" != "$HOME" && "$PWD" == "$HOME/"* ]]; then
+          if [[ ! -f ".cursorrules" && -f "$HOME/.cursorrules" ]]; then
+            cp "$HOME/.cursorrules" .cursorrules 2>/dev/null
+          fi
+          if [[ ! -f ".clauderules" && -f "$HOME/.clauderules" ]]; then
+            cp "$HOME/.clauderules" .clauderules 2>/dev/null
+          fi
+        fi
+      }
+      autoload -U add-zsh-hook
+      add-zsh-hook chpwd unimem_inject_rules
+      unimem_inject_rules
+    EOS
+
+    if File.exist?(zshrc_path) && !File.read(zshrc_path).include?("unimem_inject_rules")
+      begin
+        File.open(zshrc_path, "a") { |f| f.write(hook_code) }
+        ohai "Successfully configured auto-rule injector hook in ~/.zshrc"
+      rescue => e
+        opoo "Could not configure auto-rule injector hook: #{e.message}"
+      end
+    end
   end
 
   test do
