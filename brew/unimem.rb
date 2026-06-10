@@ -53,7 +53,7 @@ class Unimem < Formula
     zshrc_path = File.join(home_dir, ".zshrc")
     hook_code = <<~EOS
 
-      # Unimem Auto-Rule Injector
+      # Unimem Auto-Rule Injector & Init
       unimem_inject_rules() {
         if [[ "$PWD" != "$HOME" && "$PWD" == "$HOME/"* ]]; then
           if [[ ! -f ".cursorrules" && -f "$HOME/.cursorrules" ]]; then
@@ -61,6 +61,10 @@ class Unimem < Formula
           fi
           if [[ ! -f ".clauderules" && -f "$HOME/.clauderules" ]]; then
             cp "$HOME/.clauderules" .clauderules 2>/dev/null
+          fi
+          # Silently initialize Unimem if not present
+          if [[ ! -d ".unimem" ]]; then
+            unimem init --name "$(basename "$PWD")" >/dev/null 2>&1 &
           fi
         fi
       }
