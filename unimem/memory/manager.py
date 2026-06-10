@@ -241,6 +241,7 @@ Do NOT scan, list, or search the entire project repository or folder tree on sta
         try:
             # List of all major AI agent and editor rule files
             rule_files = [
+                "AGENTS.md",
                 ".cursorrules",
                 ".clauderules",
                 ".windsurfrules",
