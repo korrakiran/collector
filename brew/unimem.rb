@@ -11,7 +11,7 @@ class Unimem < Formula
   desc "Universal Project Memory Layer for AI Coding Agents"
   homepage "https://github.com/korrakiran/collector"
   url "https://github.com/korrakiran/collector/archive/refs/tags/v0.3.0.tar.gz"
-  sha256 "PLACEHOLDER_UPDATE_AFTER_TAGGING"
+  sha256 "3c676b6e569b30cc006128d55de53355a57a292811557f7253eee7fb7bdf4142"
   license "MIT"
   head "https://github.com/korrakiran/collector.git", branch: "main"
 
