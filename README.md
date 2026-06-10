@@ -4,8 +4,10 @@
 [![Python Version](https://img.shields.io/badge/Python-3.12%2B-blue.svg)](https://www.python.org/downloads/)
 [![Platform Support](https://img.shields.io/badge/Platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey.svg)](#-installation-guide)
 [![Homebrew Formula](https://img.shields.io/badge/Homebrew-Formula-orange.svg)](https://github.com/korrakiran/homebrew-unimem)
+[![Tests](https://img.shields.io/badge/Tests-41%20passing-brightgreen.svg)](https://github.com/korrakiran/collector)
+[![Version](https://img.shields.io/badge/Version-0.3.0-blue.svg)](https://github.com/korrakiran/collector/releases)
 
-**Unimem** is a universal, persistent project memory and handoff layer designed for AI coding agents (like Claude Code, Gemini CLI, Cursor, Aider, Windsurf, and more). It helps you seamlessly switch between different AI coding tools mid-project without losing context, progress, or architectural decisions.
+**Unimem** is a universal, persistent project memory and handoff layer designed for AI coding agents (like Claude Code, Gemini CLI, Cursor, Aider, Windsurf, Cline, and GitHub Copilot). It helps you seamlessly switch between different AI coding tools mid-project without losing context, progress, or architectural decisions.
 
 ---
 
@@ -22,12 +24,15 @@ When building apps with AI agents, you often hit limits:
 
 ## Key Features
 
-* **Zero-Command Handoff**: You don't need to manually initialize, watch, or compile. Global shell hooks copy rule files and initialize memory automatically.
+* **Zero-Command Handoff**: You don't need to manually initialize, watch, or compile. Global shell hooks copy rule files and initialize memory automatically on `cd`.
 * **Double-Layer Memory & Bi-directional Sync**:
   * `.unimem/state.json`: A structured, queryable schema of the roadmap, completed features, and file paths.
   * `.unimem/memory.md`: An auto-generated, human-readable project context file read by AI agents at startup. Edits made by the AI directly to `.unimem/memory.md` are automatically parsed and reconciled back into `state.json`.
-* **Abrupt Crash Protection**: The Zsh shell hook automatically triggers `unimem summary` in the background every time a command completes. If an agent crashes or is interrupted (`Ctrl+C`), your project memory is saved instantly.
-* **Universal Agent Compatibility**: Works with any agent that respects `.cursorrules`, `.clauderules`, `.windsurfrules`, `.clinerules`, or `.github/copilot-instructions.md`.
+* **Real-Time Updates**: `state.json` and `memory.md` are rebuilt on every file save event — not just on manual `unimem summary` runs. Context is never stale.
+* **Crash & Interrupt Protection**: Signal handlers (`SIGTERM`/`SIGINT`) and orphan session recovery (sessions with no `end_time` older than 10 minutes) ensure context is saved even if an agent crashes mid-session.
+* **Goal/Task Progression Loop**: Tracks `current_goal` → `current_task` → `next_task`. When a task is completed, run `unimem task done --next "..."` to promote the task chain forward.
+* **Universal Agent Compatibility**: Writes rule files for 5 agents automatically — `.cursorrules` (Cursor), `.clauderules` (Claude Code), `.windsurfrules` (Windsurf), `.clinerules` (Cline), and `.github/copilot-instructions.md` (GitHub Copilot).
+* **41 Tests, 100% Local**: No external API calls, no network requests, no cloud storage. 2,500+ lines of pure Python running entirely on your machine.
 
 ---
 
@@ -35,9 +40,9 @@ When building apps with AI agents, you often hit limits:
 
 Unimem is built with a local-first, privacy-respecting design:
 * **Zero Network Calls**: The Unimem CLI runs 100% offline. It does not send any files, code snippets, or project data to any external server or cloud service.
-* **Local Storage Only**: All project memory and configuration details are stored entirely locally inside the hidden `.unimem/` folder right at the root of your project.
-* **No External APIs**: The `local` summarizer engine uses built-in Python string parsing and regex heuristics to compile project state, meaning your private logs are never sent to an external LLM provider (like OpenAI or Anthropic).
-* **Git Control**: You can choose whether to check the `.unimem/` folder into your GitHub repository (allowing other teammates to share the same memory layer) or add it to `.gitignore` to keep it strictly on your local machine.
+* **Local Storage Only**: All project memory and configuration details are stored entirely locally inside the hidden `.unimem/` folder at the root of your project.
+* **No External APIs**: The `local` summarizer engine uses built-in Python string parsing and regex heuristics to compile project state — your private code and logs are never sent to an external LLM provider.
+* **Git Control**: You can choose whether to check the `.unimem/` folder into your GitHub repository (allowing teammates to share the same memory layer) or add it to `.gitignore` to keep it strictly local.
 
 ---
 
@@ -77,7 +82,6 @@ sequenceDiagram
 ### macOS Installation
 
 #### Option 1: Via Homebrew (Recommended)
-You can tap and install Unimem globally with a single command:
 ```bash
 brew tap korrakiran/unimem
 brew install korrakiran/unimem/unimem
@@ -133,10 +137,10 @@ pipx install unimem
 
 ## CLI Command Reference
 
-Unimem provides a set of powerful, lightweight CLI commands:
+Unimem provides 8 CLI commands:
 
 ### `unimem init`
-Initializes a new Unimem memory repository in the current directory. 
+Initializes a new Unimem memory repository in the current directory.
 * *Auto-run in the background by the shell hook when entering a new folder.*
 
 ### `unimem status`
@@ -155,23 +159,39 @@ Displays the active project root, memory initialization status, and current task
 ```
 
 ### `unimem summary`
-Compiles all recorded event logs (saves, git commits, terminal runs) and reconciles manual modifications inside `.unimem/state.json` to regenerate the markdown `.unimem/memory.md` file.
+Compiles all recorded event logs (saves, git commits, terminal runs) and reconciles manual modifications inside `.unimem/state.json` to regenerate `.unimem/memory.md`.
 * *Auto-run in the background by the shell hook after every command completes.*
+
+### `unimem task done`
+Marks the current task as complete and promotes `next_task` → `current_task`.
+```bash
+unimem task done --next "build the frontend UI"
+```
 
 ### `unimem continue`
 Outputs a structured summary of the project state. This is what the incoming AI agent reads to instantly gain full project context.
 
 ### `unimem run -- <command>`
-Runs a command inside the Unimem tracking sandbox (e.g. `unimem run -- npm run build`). This intercepts the command's exit code, duration, and output and logs it as an event to help compile the project history.
+Runs a command inside the Unimem tracking sandbox. Intercepts the exit code, duration, and output and logs it as an event.
+```bash
+unimem run -- npm run build
+unimem run -- pytest
+```
 
 ### `unimem watch`
 Starts a filesystem watcher that logs file changes (creations, edits, deletions) as Unimem events in real time.
 
+### `unimem snapshot`
+Creates, lists, or restores point-in-time backups of `state.json`.
+```bash
+unimem snapshot create
+unimem snapshot list
+unimem snapshot restore <snapshot_name>
+```
+
 ---
 
 ## Memory Folder Structure
-
-All project memory resides inside a local, hidden `.unimem/` folder at the root of your project:
 
 ```text
 .unimem/
@@ -185,9 +205,56 @@ All project memory resides inside a local, hidden `.unimem/` folder at the root 
 
 ---
 
+## Uninstallation Guide
+
+### Remove Unimem CLI
+
+#### If installed via Homebrew:
+```bash
+brew uninstall korrakiran/unimem/unimem
+brew untap korrakiran/unimem
+```
+
+#### If installed via pipx:
+```bash
+pipx uninstall unimem
+```
+
+### Remove Shell Hooks from `~/.zshrc`
+Open `~/.zshrc` in any editor and delete the block between these two lines (inclusive):
+```bash
+# Unimem Auto-Rule Injector & Init
+...
+unimem_inject_rules
+```
+Then reload your shell:
+```bash
+source ~/.zshrc
+```
+
+### Remove Global Rule Files
+```bash
+rm -f ~/.cursorrules ~/.clauderules ~/.windsurfrules ~/.clinerules
+```
+
+### Remove Project Memory from a Specific Project
+```bash
+cd your-project
+rm -rf .unimem .cursorrules .clauderules .windsurfrules .clinerules .github/copilot-instructions.md
+```
+
+### Remove All Project Memory Globally
+To remove `.unimem/` from every project under your home directory:
+```bash
+find ~ -name ".unimem" -type d -maxdepth 4 -exec rm -rf {} + 2>/dev/null
+```
+*Use `maxdepth` carefully — adjust the value based on how deep your projects are nested.*
+
+---
+
 ## Adapter Development Guide
 
-Unimem uses an Adapter pattern to connect code intelligence with agents. Custom adapters can be registered to support proprietary agents:
+Unimem ships with 4 built-in adapters (Claude, Gemini, Codex, Generic) and supports custom adapters via the registry pattern:
 
 ```python
 from typing import Dict, Any, List
@@ -227,7 +294,7 @@ We welcome contributions to Unimem! To set up local development:
    source .venv/bin/activate
    pip install -e ".[dev]"
    ```
-3. Run tests using pytest:
+3. Run the 41-test suite:
    ```bash
    pytest
    ```
