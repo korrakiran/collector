@@ -244,6 +244,8 @@ Do NOT scan, list, or search the entire project repository or folder tree on sta
             FileStore.write(self.project_root / ".clauderules", rules_content)
             FileStore.write(self.project_root / ".windsurfrules", rules_content)
             FileStore.write(self.project_root / ".clinerules", rules_content)
+            FileStore.write(self.project_root / ".antigravityrules", rules_content)
+            FileStore.write(self.project_root / ".geminirules", rules_content)
             
             # Write to .github/copilot-instructions.md for Copilot
             copilot_dir = self.project_root / ".github"

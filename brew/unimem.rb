@@ -152,7 +152,9 @@ class Unimem < Formula
       File.write(File.join(home_dir, ".clauderules"), rules_content)
       File.write(File.join(home_dir, ".windsurfrules"), rules_content)
       File.write(File.join(home_dir, ".clinerules"), rules_content)
-      ohai "Successfully configured global agent rules in ~/.cursorrules, ~/.clauderules, ~/.windsurfrules, and ~/.clinerules"
+      File.write(File.join(home_dir, ".antigravityrules"), rules_content)
+      File.write(File.join(home_dir, ".geminirules"), rules_content)
+      ohai "Successfully configured global agent rules in ~/.cursorrules, ~/.clauderules, ~/.windsurfrules, ~/.clinerules, ~/.antigravityrules, and ~/.geminirules"
     rescue => e
       opoo "Could not write global agent rules: #{e.message}"
     end
@@ -175,6 +177,12 @@ class Unimem < Formula
           fi
           if [[ ! -f ".clinerules" && -f "$HOME/.clinerules" ]]; then
             cp "$HOME/.clinerules" .clinerules 2>/dev/null
+          fi
+          if [[ ! -f ".antigravityrules" && -f "$HOME/.antigravityrules" ]]; then
+            cp "$HOME/.antigravityrules" .antigravityrules 2>/dev/null
+          fi
+          if [[ ! -f ".geminirules" && -f "$HOME/.geminirules" ]]; then
+            cp "$HOME/.geminirules" .geminirules 2>/dev/null
           fi
           # Silently initialize Unimem if not present
           if [[ ! -d ".unimem" ]]; then
