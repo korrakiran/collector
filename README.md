@@ -65,6 +65,8 @@ sequenceDiagram
     Gemini-->>You: Continues exactly where Claude stopped
 ```
 
+---
+
 ## Installation Guide
 
 ### macOS Installation
@@ -139,11 +141,11 @@ Displays the active project root, memory initialization status, and current task
 │                            │
 │ Root: /Users/kiran/test102 │
 ╰────────────────────────────╯
-╭──────────────────── 🎯 Current Focus ────────────────────╮
-│ Goal: Initialize the repository and basic components     │
-│ Current Task: Initialize the backend service             │
-│ Next Task: Create a basic API endpoint                   │
-╰──────────────────────────────────────────────────────────╯
+╭──────────────────── Current Focus ────────────────────╮
+│ Goal: Initialize the repository and basic components  │
+│ Current Task: Initialize the backend service          │
+│ Next Task: Create a basic API endpoint                │
+╰───────────────────────────────────────────────────────╯
 ```
 
 ### `unimem summary`
@@ -210,7 +212,7 @@ pipx uninstall unimem
 
 ### Remove Shell Hooks from `~/.zshrc`
 Open `~/.zshrc` in any editor and delete the block between these two lines (inclusive):
-```bash
+```text
 # Unimem Auto-Rule Injector & Init
 ...
 unimem_inject_rules
@@ -251,7 +253,7 @@ from unimem.adapters.registry import AdapterRegistry
 
 @AdapterRegistry.register("my_custom_agent")
 class MyCustomAdapter(BaseAdapter):
-    
+
     def load_context(self) -> Dict[str, Any]:
         return {
             "prompt_instructions": "resume development on task X"
