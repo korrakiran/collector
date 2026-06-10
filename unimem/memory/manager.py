@@ -499,6 +499,3 @@ Approved
 *Last updated: {state.last_updated}*
 """
         FileStore.write(memory_file, md_content)
-        
-        # Also write to root-level MEMORY.md for Gemini CLI auto-discovery
-        FileStore.write(self.project_root / "MEMORY.md", md_content)
