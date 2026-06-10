@@ -31,6 +31,16 @@ When building apps with AI agents, you often hit limits:
 
 ---
 
+## 🔒 Security & Privacy
+
+Unimem is built with a local-first, privacy-respecting design:
+* 📴 **Zero Network Calls**: The Unimem CLI runs 100% offline. It does not send any files, code snippets, or project data to any external server or cloud service.
+* 📂 **Local Storage Only**: All project memory and configuration details are stored entirely locally inside the hidden `.unimem/` folder right at the root of your project.
+* ⚙️ **No External APIs**: The `local` summarizer engine uses built-in Python string parsing and regex heuristics to compile project state, meaning your private logs are never sent to an external LLM provider (like OpenAI or Anthropic).
+* 🔧 **Git Control**: You can choose whether to check the `.unimem/` folder into your GitHub repository (allowing other teammates to share the same memory layer) or add it to `.gitignore` to keep it strictly on your local machine.
+
+---
+
 ## 🔄 Zero-Command Handoff in Action
 
 ```mermaid
