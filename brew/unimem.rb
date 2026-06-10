@@ -22,6 +22,34 @@ class Unimem < Formula
     virtualenv_install_with_resources
   end
 
+  def post_install
+    home_dir = Dir.home
+    rules_content = <<~EOS
+      # Global Unimem Automation Rules
+
+      Unimem is active in this project. You are resuming work from a previous session.
+
+      Before you begin coding:
+      1. Read the project memory file at `.unimem/memory.md` to get your full context:
+         - Current Goal & Task focus
+         - Completed and In-Progress features
+         - Architectural decisions
+         - Important files to locate
+      2. Trust `.unimem/memory.md` as the source of truth for the project state.
+
+      When you finish or pause work:
+      - Update the Unimem state (e.g. by running `unimem summary` or updating `.unimem/state.json`) so the next agent can seamlessly take over.
+    EOS
+
+    begin
+      File.write(File.join(home_dir, ".cursorrules"), rules_content)
+      File.write(File.join(home_dir, ".clauderules"), rules_content)
+      ohai "Successfully configured global agent rules in ~/.cursorrules and ~/.clauderules"
+    rescue => e
+      opoo "Could not write global agent rules: #{e.message}"
+    end
+  end
+
   test do
     # Check if CLI displays version correctly
     assert_match "version", shell_output("#{bin}/unimem --version")
