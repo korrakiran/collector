@@ -188,6 +188,7 @@ Do NOT scan, list, or search the entire project repository or folder tree on sta
 
 When you finish or pause work:
 - Update the Unimem state (e.g. by running `unimem summary`, or updating `.unimem/state.json` or `.unimem/memory.md`) so the next agent can seamlessly take over.
+- When you complete the current task, run: unimem task done --next "describe the next task"
 """
         try:
             # Write to root level rule files for different agents
@@ -266,6 +267,15 @@ When you finish or pause work:
             logger.debug(f"Failed to auto-rebuild state on event record: {e}")
             
         return event_file
+
+    def complete_task(self, next_task: str = "") -> None:
+        """Complete the current task and promote the next one."""
+        state = self.load_state()
+        if state.current_task:
+            state.completed_features.append(state.current_task)
+        state.current_task = state.next_task
+        state.next_task = next_task
+        self.save_state(state)
 
     def add_decision(self, decision_title: str, context: str, decision: str) -> Path:
         """Add a design or architectural decision document."""

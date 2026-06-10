@@ -190,3 +190,41 @@ This is a custom reconciled description.
     assert "handler.go" in state.important_files
     assert "Port configuration" in state.blocked_by
     assert "pytest" in state.tool_history
+
+def test_manager_complete_task_and_promotion(initialized_unimem):
+    """Verify that complete_task functions correctly and LocalSummarizer promotion works."""
+    manager = MemoryManager(initialized_unimem)
+    
+    # Setup initial state
+    state = manager.load_state()
+    state.current_task = "Implement API auth"
+    state.next_task = "Add integration tests"
+    manager.save_state(state)
+    
+    # 1. Test complete_task method
+    manager.complete_task("Refactor auth module")
+    
+    updated = manager.load_state()
+    assert "Implement API auth" in updated.completed_features
+    assert updated.current_task == "Add integration tests"
+    assert updated.next_task == "Refactor auth module"
+    
+    # 2. Test LocalSummarizer heuristic promotion
+    updated.current_task = "Task A"
+    updated.next_task = "Task B"
+    manager.save_state(updated)
+    
+    # Record an event that completes "Task A"
+    from unimem.memory.schemas import Event
+    event = Event(
+        tool="watcher",
+        event_type="git_commit",
+        prompt="",
+        response_summary="complete Task A",
+        files_changed=[]
+    )
+    manager.record_event(event)
+    
+    final_state = manager.load_state()
+    assert final_state.current_task == "Task B"
+    assert final_state.next_task == ""

@@ -81,4 +81,11 @@ class LocalSummarizer(BaseSummarizer):
         current_state.blocked_by = blocked_by[-5:] # Keep latest 5
         current_state.tool_history = sorted(list(tools))
         
+        # Task promotion logic
+        if current_state.current_task:
+            task_lower = current_state.current_task.lower()
+            if any(task_lower in feat.lower() for feat in completed):
+                current_state.current_task = current_state.next_task
+                current_state.next_task = ""
+        
         return current_state

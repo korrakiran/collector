@@ -91,3 +91,25 @@ def test_cli_snapshot_commands(initialized_unimem, monkeypatch):
     result_restore = runner.invoke(app, ["snapshot", "restore", "1"])
     assert result_restore.exit_code == 0
     assert "Successfully restored state" in result_restore.stdout
+
+def test_cli_task_done(initialized_unimem, monkeypatch):
+    """Verify 'unimem task done' updates and promotes tasks."""
+    monkeypatch.chdir(initialized_unimem)
+    
+    manager = MemoryManager(initialized_unimem)
+    state = manager.load_state()
+    state.current_task = "Task A"
+    state.next_task = "Task B"
+    manager.save_state(state)
+    
+    result = runner.invoke(app, ["task", "done", "--next", "Task C"])
+    assert result.exit_code == 0
+    assert "Task completed and promoted successfully" in result.stdout
+    assert "Task B" in result.stdout
+    assert "Task C" in result.stdout
+    
+    # Check updated state
+    updated = manager.load_state()
+    assert "Task A" in updated.completed_features
+    assert updated.current_task == "Task B"
+    assert updated.next_task == "Task C"

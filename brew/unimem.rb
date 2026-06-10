@@ -10,7 +10,7 @@ class Unimem < Formula
 
   desc "Universal Project Memory Layer for AI Coding Agents"
   homepage "https://github.com/korrakiran/collector"
-  url "https://github.com/korrakiran/collector/archive/refs/tags/v0.1.0.tar.gz"
+  url "https://github.com/korrakiran/collector/archive/refs/tags/v0.2.0.tar.gz"
   # Note: Replace this placeholder SHA256 with the actual release archive SHA256
   sha256 "5f8758d59c4ad763b4f6da0f833c25007eee42ecd3d9037a0664097b9ac14ada"
   license "MIT"
@@ -143,6 +143,7 @@ class Unimem < Formula
 
       When you finish or pause work:
       - Update the Unimem state (e.g. by running `unimem summary`, or updating `.unimem/state.json` or `.unimem/memory.md`) so the next agent can seamlessly take over.
+      - When you complete the current task, run: unimem task done --next "describe the next task"
     EOS
 
     begin
