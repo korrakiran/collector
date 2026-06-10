@@ -29,7 +29,9 @@ You can tap and install Unimem globally:
 ```bash
 brew tap korrakiran/unimem
 brew install korrakiran/unimem/unimem
+source ~/.zshrc
 ```
+*Note: Sourcing your shell configuration is only required once to activate the newly injected shell hooks in your current terminal session. Any newly opened terminal tabs or windows will load them automatically.*
 
 #### Option 2: Via `pipx` (Isolated Python Env)
 `pipx` automatically manages virtual environments for Python command-line tools:
