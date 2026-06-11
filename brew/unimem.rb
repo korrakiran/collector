@@ -143,32 +143,37 @@ class Unimem < Formula
       5. Trust `AGENTS.md`, `.unimem/state.json`, and `.unimem/memory.md` as the absolute sources of truth for the project state. Do NOT attempt to reconstruct them or scan the repository first.
 
       CRITICAL WORKFLOW RULES:
-      - You MUST update `.unimem/state.json` immediately after EVERY individual file is created, modified, or deleted. Do NOT batch file changes — each file operation must be recorded in the `file_history` of `state.json` immediately.
-      - Do NOT update `memory.md` after every file change. You should ONLY update `memory.md` at the end of the query execution by running `unimem summary`.
+      - You MUST update `.unimem/state.json` immediately after EVERY individual file is created, modified, or deleted. Do NOT batch file changes — each file operation must be recorded in the `file_history` of `state.json` immediately. This ensures crash recovery and context preservation.
+      - Do NOT update `memory.md` after every file change. Instead, run `unimem summary` at strategic checkpoints (see UNIMEM UPDATE GUIDELINES below).
       - When you finish or pause work, always update `.unimem/state.json` first to document completed features, goals, or tasks, then run `unimem summary` to synchronize changes into `memory.md` and keep the supporting `.unimem/` logs aligned.
       - When you complete the current task, run: unimem task done --next "describe the next task"
       - If you are interrupted or about to stop, always run: unimem task done --next "describe next task" before exiting so context is preserved for the next agent.
 
       UNIMEM UPDATE GUIDELINES:
-      Only run `unimem summary` for meaningful changes:
+      Run `unimem summary` at checkpoint moments to prevent mid-process context loss:
 
-      MAJOR changes (worth logging):
-      - New features or completed tasks
-      - Significant architectural decisions
-      - Large refactors with behavior changes
-      - New dependencies or imports
-      - Critical bug fixes
-      - End of work session
+      ALWAYS run `unimem summary` at:
+      - Major milestones (feature/module completion, architectural decisions)
+      - Every 45 minutes of continuous work (safety checkpoint)
+      - Before stopping or pausing work
+      - At the end of the work session
+      - After completing a significant refactor or bug fix
 
-      MINOR changes (skip `unimem summary`):
-      - CSS or styling tweaks
+      DO NOT run `unimem summary` for:
+      - CSS or styling tweaks (unless part of a major UI overhaul)
       - Code formatting or comments
       - Typo fixes
       - Simple variable renames
       - Dependency version bumps
       - Whitespace changes
 
-      For minor changes: Make the change, build/test, but do NOT run `unimem summary`. For major changes: Always run `unimem summary` before stopping.
+      For minor changes: Make the change, build/test, update state.json, but skip `unimem summary` unless approaching a checkpoint time or milestone.
+
+      CRASH RECOVERY:
+      If an agent crashes mid-work:
+      1. The next agent reads `.unimem/state.json` and its `file_history` to see exactly what was created/modified
+      2. The next agent reads `.unimem/memory.md` for the last completed milestone
+      3. The next agent reconstructs only the in-progress work since the last checkpoint, not the entire project
 
       CRITICAL GIT RULE:
       - Do NOT stage, commit, or push the `.unimem` directory or any files inside it (such as `.unimem/state.json` or `.unimem/memory.md`). They are local-only project memory.
