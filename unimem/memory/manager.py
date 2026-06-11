@@ -242,14 +242,16 @@ Unimem is active in this project. You are resuming work from a previous session.
 
 CRITICAL STARTUP RULE:
 Do NOT scan, list, or search the entire project repository or folder tree on startup. This wastes token context and is inefficient. Instead, follow these steps immediately:
-1. Run `unimem summary` to compile all recent events and file modifications into the memory layer.
-2. Read the structured project state at `.unimem/state.json` first to get the exact roadmap, goals, tasks, and file listings.
+1. Read `AGENTS.md` first for the repository startup instructions.
+2. Read the structured project state at `.unimem/state.json` to get the exact roadmap, goals, tasks, and file listings.
 3. Read the human-readable project memory at `.unimem/memory.md` next to get the narrative context, recent decisions, and details.
-4. Trust `.unimem/state.json` and `.unimem/memory.md` as the absolute sources of truth for the project state. Do NOT attempt to reconstruct them or scan the repository.
+4. Read the supporting Unimem logs and records in `.unimem/events/`, `.unimem/sessions/`, `.unimem/snapshots/`, and `.unimem/decisions/` for history, updates, backups, and architecture decisions.
+5. Trust `AGENTS.md`, `.unimem/state.json`, and `.unimem/memory.md` as the absolute sources of truth for the project state. Do NOT attempt to reconstruct them or scan the repository first.
 
-- When you finish or pause work:
-  - Always edit and update `.unimem/state.json` first to document completed features, goals, or tasks.
-  - Next, run `unimem summary` in the terminal to compile and synchronize these changes into `.unimem/memory.md` and update agent rules files so the next agent can take over with full context.
+- CRITICAL WORKFLOW RULES:
+  - You MUST update `.unimem/state.json` immediately after EVERY individual file is created, modified, or deleted. Do NOT batch file changes — each file operation must be recorded in the `file_history` of `state.json` immediately.
+  - Do NOT update `memory.md` after every file change. You should ONLY update `memory.md` at the end of the query execution by running `unimem summary`.
+  - When you finish or pause work, always update `.unimem/state.json` first to document completed features, goals, or tasks, then run `unimem summary` to synchronize changes into `memory.md` and keep the supporting `.unimem/` logs aligned.
   - When you complete the current task, run: unimem task done --next "describe the next task"
   - If you are interrupted or about to stop, always run: unimem task done --next "describe next task" before exiting so context is preserved for the next agent.
 
