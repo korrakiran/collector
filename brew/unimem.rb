@@ -141,17 +141,38 @@ class Unimem < Formula
       4. Read the supporting Unimem logs and records in `.unimem/events/`, `.unimem/sessions/`, `.unimem/snapshots/`, and `.unimem/decisions/` for history, updates, backups, and architecture decisions.
       5. Trust `AGENTS.md`, `.unimem/state.json`, and `.unimem/memory.md` as the absolute sources of truth for the project state. Do NOT attempt to reconstruct them or scan the repository first.
 
-      - CRITICAL WORKFLOW RULES:
-        - You MUST update `.unimem/state.json` immediately after EVERY individual file is created, modified, or deleted. Do NOT batch file changes — each file operation must be recorded in the `file_history` of `state.json` immediately.
-        - Do NOT update `memory.md` after every file change. You should ONLY update `memory.md` at the end of the query execution by running `unimem summary`.
-        - When you finish or pause work, always update `.unimem/state.json` first to document completed features, goals, or tasks, then run `unimem summary` to synchronize changes into `memory.md` and keep the supporting `.unimem/` logs aligned.
-        - When you complete the current task, run: unimem task done --next "describe the next task"
-        - If you are interrupted or about to stop, always run: unimem task done --next "describe next task" before exiting so context is preserved for the next agent.
+      CRITICAL WORKFLOW RULES:
+      - You MUST update `.unimem/state.json` immediately after EVERY individual file is created, modified, or deleted. Do NOT batch file changes — each file operation must be recorded in the `file_history` of `state.json` immediately.
+      - Do NOT update `memory.md` after every file change. You should ONLY update `memory.md` at the end of the query execution by running `unimem summary`.
+      - When you finish or pause work, always update `.unimem/state.json` first to document completed features, goals, or tasks, then run `unimem summary` to synchronize changes into `memory.md` and keep the supporting `.unimem/` logs aligned.
+      - When you complete the current task, run: unimem task done --next "describe the next task"
+      - If you are interrupted or about to stop, always run: unimem task done --next "describe next task" before exiting so context is preserved for the next agent.
 
-      - CRITICAL GIT RULE:
-        - Do NOT stage, commit, or push the `.unimem` directory or any files inside it (such as `.unimem/state.json` or `.unimem/memory.md`). They are local-only project memory.
-        - Do NOT stage, commit, or push any temporary files, logs, or screenshots (especially those in `/var/folders/`, `/tmp/`, or similar temp folders).
-        - Do NOT stage, commit, or push any of the auto-generated agent rules or instruction files (such as `AGENTS.md`, `.cursorrules`, `.aiderules`, `.aider.instructions.md`, etc.). These are local configurations and must remain untracked.
+      UNIMEM UPDATE GUIDELINES:
+      Only run `unimem summary` for meaningful changes:
+
+      MAJOR changes (worth logging):
+      - New features or completed tasks
+      - Significant architectural decisions
+      - Large refactors with behavior changes
+      - New dependencies or imports
+      - Critical bug fixes
+      - End of work session
+
+      MINOR changes (skip `unimem summary`):
+      - CSS or styling tweaks
+      - Code formatting or comments
+      - Typo fixes
+      - Simple variable renames
+      - Dependency version bumps
+      - Whitespace changes
+
+      For minor changes: Make the change, build/test, but do NOT run `unimem summary`. For major changes: Always run `unimem summary` before stopping.
+
+      CRITICAL GIT RULE:
+      - Do NOT stage, commit, or push the `.unimem` directory or any files inside it (such as `.unimem/state.json` or `.unimem/memory.md`). They are local-only project memory.
+      - Do NOT stage, commit, or push any temporary files, logs, or screenshots (especially those in `/var/folders/`, `/tmp/`, or similar temp folders).
+      - Do NOT stage, commit, or push any of the auto-generated agent rules or instruction files (such as `AGENTS.md`, `.cursorrules`, `.aiderules`, `.aider.instructions.md`, etc.). These are local configurations and must remain untracked.
     EOS
 
     begin
